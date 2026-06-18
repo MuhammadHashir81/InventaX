@@ -11,11 +11,8 @@ const Membership = () => {
   const [currentPeriodEnd, setCurrentPeriodEnd] = useState('')
   const [trialStartDate,setTrialStartDate] = useState('')
   const [trialEndDate,setTrialEndDate] = useState('')
-<<<<<<< HEAD
 
-=======
   
->>>>>>> 6e3307308e0065e87746c2059101a8309d55c72d
   const fetchUserDetails = async () => {
     try {
       setLoading(true)

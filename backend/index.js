@@ -10,9 +10,9 @@ import { invoiceRouter } from './routes/invoice.route.js'
 import { outflowRouter } from './routes/outflow.route.js'
 import { dashboardRouter } from './routes/dashboard.route.js'
 import { authRouter } from './routes/auth.route.js'
-import { adminRouter } from './routes/adminAuth.route.js'
 import { paymentRouter } from './routes/payment.route.js'
 import { handleWebhook } from './controllers/payment.controller.js'
+import { superAdminRouter } from './routes/super.admin.route.js'
 const app = express()
 app.post('/api/payment/webhook',express.raw({ type: 'application/json' }), handleWebhook)
 
@@ -56,7 +56,9 @@ app.use('/api/product/invoice',invoiceRouter)
 app.use('/api/outflow',outflowRouter)
 app.use('/api/dashboard',dashboardRouter)
 
-app.use('/api/admin',adminRouter)
+// super admin routers
+app.use('/api/super-admin',superAdminRouter)
+
 app.get('/',(req,res)=>{
   res.send('SaaS')
 })

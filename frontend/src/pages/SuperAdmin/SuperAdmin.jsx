@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   FiGrid,
   FiUsers,
@@ -22,6 +22,7 @@ import { IoIosLogOut } from "react-icons/io";
 import { api } from "../../../api/api";
 
 // ─── Mock Data ────────────────────────────────────────────────────────────────
+
 
 const TENANTS = [
   { id: 1, name: "Acme Corp", owner: "john@acme.com", plan: "Pro", status: "active", users: 14, joined: "2024-11-03" },
@@ -87,10 +88,50 @@ const AuditIcon = ({ level }) => {
 // ─── Section: Overview ────────────────────────────────────────────────────────
 
 const OverviewSection = () => {
+  const [tenants, setTenants] = useState([])
+  const [totalTenants, setTotalTenants] = useState(0)
+  const [activeSubscribers, setActiveSubscribers] = useState(0)
+  const [totalRevenue, setTotalRevenue] = useState(0)
+
+  // fetch all tenants
+
+  
+
+  const fetchAllTenants = async () => {
+    try {
+      const response = await api.get('/api/super-admin/get-all-tenants')
+      setTotalTenants(response.totalTenants)
+      setActiveSubscribers(response.activeSubscribers)
+      console.log(response)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  const fetchRevenue = async () => {
+    try {
+      const response = await api.get('/api/super-admin/get-revenue')
+      console.log(response)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  useEffect(() => {
+    fetchAllTenants()
+  }, [])
+
+
+  useEffect(() => {
+    fetchRevenue()
+  }, [])
+
+
+
   const stats = [
-    { label: "Total Tenants", value: "5", icon: <FiUsers />, color: "text-blue-600 bg-blue-50" },
-    { label: "Active Subscriptions", value: "3", icon: <FiCheckCircle />, color: "text-emerald-600 bg-emerald-50" },
-    { label: "Monthly Revenue", value: "$336", icon: <FiDollarSign />, color: "text-violet-600 bg-violet-50" },
+    { label: "Total Tenants", value: totalTenants, icon: <FiUsers />, color: "text-blue-600 bg-blue-50" },
+    { label: "Active Subscriptions", value: activeSubscribers, icon: <FiCheckCircle />, color: "text-emerald-600 bg-emerald-50" },
+    { label: "Monthly Revenue", value: totalRevenue, icon: <FiDollarSign />, color: "text-violet-600 bg-violet-50" },
     { label: "Active Users", value: "69", icon: <FiUserCheck />, color: "text-indigo-600 bg-indigo-50" },
   ];
 
@@ -275,11 +316,10 @@ const AuditSection = () => {
             <button
               key={f}
               onClick={() => setFilter(f)}
-              className={`text-xs px-3 py-1.5 rounded-lg font-medium capitalize transition ${
-                filter === f
+              className={`text-xs px-3 py-1.5 rounded-lg font-medium capitalize transition ${filter === f
                   ? "bg-gray-800 text-white"
                   : "bg-white border border-gray-200 text-gray-500 hover:bg-gray-50"
-              }`}
+                }`}
             >
               {f}
             </button>
@@ -350,9 +390,8 @@ const SuperAdmin = () => {
 
       {/* ── Sidebar ── */}
       <aside
-        className={`${
-          collapsed ? "w-[70px]" : "w-[240px]"
-        } shrink-0 h-screen sticky top-0 bg-gray-900 text-white flex flex-col transition-all duration-200 overflow-hidden`}
+        className={`${collapsed ? "w-[70px]" : "w-[240px]"
+          } shrink-0 h-screen sticky top-0 bg-gray-900 text-white flex flex-col transition-all duration-200 overflow-hidden`}
       >
         {/* Logo */}
         <div className="flex items-center justify-center h-[64px] border-b border-gray-800">
@@ -374,11 +413,10 @@ const SuperAdmin = () => {
             <button
               key={item.key}
               onClick={() => setActiveSection(item.key)}
-              className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors cursor-pointer ${
-                activeSection === item.key
+              className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors cursor-pointer ${activeSection === item.key
                   ? "bg-blue-600 text-white"
                   : "text-gray-400 hover:bg-gray-800 hover:text-white"
-              }`}
+                }`}
             >
               <span className="text-base shrink-0">{item.icon}</span>
               {!collapsed && <span>{item.label}</span>}

@@ -63,9 +63,8 @@ const App = () => {
           <Route path='/unauthorized' element={<Unauthorized />} />
 
           {/* super admin routes */}
-          <Route path='/admin-login' element={<AdminLogin />} />
           <Route path='/super-admin' element={
-            <ProtectedRoute loginPath='/admin-login' allowedRoles={['admin']}>
+            <ProtectedRoute loginPath='/login' allowedRoles={['admin']}>
               <SuperAdmin />
             </ProtectedRoute>} />
         </Routes>
