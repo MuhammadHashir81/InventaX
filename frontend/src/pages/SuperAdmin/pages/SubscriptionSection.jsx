@@ -149,11 +149,6 @@ export const SubscriptionSection = () => {
                                     {formatDate(t.subscription.currentPeriodStart ? t.subscription.currentPeriodStart : t.subscription.trialStartDate)}
                                 </td>
 
-                                {/* <td className="px-5 py-3 text-gray-500">
-                                    {formatDate(t.subscription.currentPeriodEnd ? t.subscription.currentPeriodEnd : t.subscription.trialEndDate)}
-
-                                </td> */}
-
                             </tr>
                         ))}
 
