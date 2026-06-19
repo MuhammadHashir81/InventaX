@@ -140,6 +140,7 @@ const Products = () => {
     
   }
   
+  
   useEffect(() => {
     if (!isSearching) return
     const timer = setTimeout(() => {

@@ -122,9 +122,9 @@ const handleGetAllInvoices = async (req, res) => {
                     date: '$createdAt',
                 }
             },
-            
-            { $skip: skip },
-            { $limit: limit }
+              
+              { $skip: skip },
+              { $limit: limit }
 
         ]);
         

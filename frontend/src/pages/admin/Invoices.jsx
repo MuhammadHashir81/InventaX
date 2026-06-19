@@ -275,7 +275,7 @@ const handleResetFilters = () => {
             <div>
               <p> Total Invoices {totalInvoices}</p>
             </div>
-            <div className={`flex gap-2 items-center flex`}>
+            <div className={`flex gap-2 items-center`}>
               <button disabled={page === 1} onClick={handlePreviousPage} className=' border-1 border-gray-100  rounded-sm px-4 py-1 cursor-pointer hover:bg-gray-50'>previous</button>
               <p> page {page} of {totalPages} </p>
               <button disabled={page === totalPages} onClick={handleNextPage} className=' border-1 border-gray-100  rounded-sm px-4 py-1 cursor-pointer hover:bg-gray-50'>next</button>

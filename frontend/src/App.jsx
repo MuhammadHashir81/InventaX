@@ -2,6 +2,10 @@ import React, { lazy, Suspense } from 'react'
 import { Spin } from 'antd';
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import ProtectedRoute from './Components/ProtectedRoute/ProtectedRoute';
+import { TenantsSection } from './pages/SuperAdmin/pages/TenantSection';
+import { SubscriptionsSection } from './pages/SuperAdmin/pages/SubscriptionSection';
+import { OverviewSection } from './pages/SuperAdmin/pages/OverviewSection';
+import { AuditSection } from './pages/SuperAdmin/pages/AuditSection';
 const Login = lazy(() => import('./pages/admin/Login'))
 const Dashboard = lazy(() => import('./pages/admin/Dashboard'))
 const AdminLayout = lazy(() => import('./pages/admin/AdminLayout'))
@@ -36,6 +40,8 @@ const App = () => {
           {/* membership page */}
 
           <Route path='/membership' element={<Membership />} />
+
+          {/* admin routes */}
           <Route path='/admin' element={
             <ProtectedRoute loginPath='/login' allowedRoles={['user']}>
               <AdminLayout />
@@ -66,7 +72,14 @@ const App = () => {
           <Route path='/super-admin' element={
             <ProtectedRoute loginPath='/login' allowedRoles={['admin']}>
               <SuperAdmin />
-            </ProtectedRoute>} />
+            </ProtectedRoute>}> 
+            <Route index  element={<OverviewSection/>}/>
+            <Route path='tenants' element={<TenantsSection/>}/>
+            <Route path='subscriptions' element={<SubscriptionsSection/>}/>
+            <Route path='audits' element={<AuditSection/>}/>
+
+            </Route>
+
         </Routes>
       </Suspense>
     </BrowserRouter>

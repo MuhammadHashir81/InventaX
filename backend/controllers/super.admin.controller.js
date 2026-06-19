@@ -13,30 +13,78 @@ const createStripeClient = () => {
 
 // get all the tenants/ active subscribers
 export const getAllTenants = async (req, res) => {
-    try {
-        const tenants = await User.find({
-            'role': 'user'
-        })
-        const totalTenants = await User.countDocuments({
-            'role': 'user'
-        })
-        const activeSubscribers = await User.countDocuments({
-            'role': 'user',
-            'subscription.plan': 'pro',
-            'subscription.status': 'active',
-        })
 
-        
-        res.status(200).json({
-            tenants: tenants,
-            message: 'all the tenants',
-            totalTenants,
-            activeSubscribers,
-        })
-    } catch (error) {
-        res.status(500).json({ error: error.message })
-        console.log(error)
-    }
+  const page = Number(req.query.page) || 1;
+  const limit = Number(req.query.limit) || 10;
+  const skip = (page - 1) * limit;
+  const search = req.query.search?.trim()
+
+
+
+  try {
+
+    const matchStage = {
+      role: "user",
+      ...(search && { username: { $regex: search, $options: "i" } }),
+    };
+
+    const tenants = await User.find({
+      'role': 'user'
+    })
+    const totalTenants = await User.countDocuments(matchStage)
+    //  count total pages 
+    const totalPages = Math.ceil(totalTenants / limit)
+
+    const activeSubscribers = await User.countDocuments({
+      'role': 'user',
+      'subscription.plan': 'pro',
+      'subscription.status': 'active',
+    })
+
+    // aggregation for tenantSnapshot
+
+    const tenantSnapshot = await User.aggregate([
+      {
+        $match: matchStage
+      },
+      {
+        $lookup: {
+          from: 'customers', // MongoDB collection name
+          localField: '_id',
+          foreignField: 'tenantId',
+          as: 'customers'
+        }
+      },
+      {
+        $project: {
+          _id: 1,
+          username: 1,
+          email: 1,
+          role: 1,
+          subscription: 1,
+          customerCount: { $size: '$customers' },
+          customers: 1
+        }
+      },
+
+      { $skip: skip },
+      { $limit: limit }
+
+    ]);
+
+
+    res.status(200).json({
+      tenants: tenants,
+      message: 'all the tenants',
+      totalTenants,
+      activeSubscribers,
+      tenantSnapshot,
+      totalPages
+    })
+  } catch (error) {
+    res.status(500).json({ error: error.message })
+    console.log(error)
+  }
 
 }
 
@@ -48,28 +96,32 @@ export const getRevenueStats = async (req, res) => {
 
     const now = new Date()
     const startOfMonth = Math.floor(new Date(now.getFullYear(), now.getMonth(), 1).getTime() / 1000)
-const endOfMonth = Math.floor(new Date(now.getFullYear(), now.getMonth() + 1, 1).getTime() / 1000)
+    const endOfMonth = Math.floor(new Date(now.getFullYear(), now.getMonth() + 1, 1).getTime() / 1000)
 
-    // Fetch all paid invoices from Stripe (auto-paginates)
-    const [monthlyInvoices, allTimeInvoices] = await Promise.all([
-      stripe.invoices.list({
-        status: 'paid',
-        created: { gte: startOfMonth, lt: endOfMonth },
-        limit: 100,
-      }),
-      stripe.invoices.list({
-        status: 'paid',
-        limit: 100,
-      }),
-    ])
 
+    const allTimeInvoices = []
+    for await (const invoice of stripe.invoices.list({ status: 'paid' })) {
+      allTimeInvoices.push(invoice)
+    }
+
+    const monthlyInvoices = []
+    for await (const invoice of stripe.invoices.list({
+      status: 'paid',
+      created: { gte: startOfMonth, lt: endOfMonth },
+    })) {
+      monthlyInvoices.push(invoice)
+    }
+
+
+    // Now sum directly over the arrays, not .data
     const sum = (invoices) =>
-      invoices.data.reduce((acc, inv) => acc + inv.amount_paid, 0) / 100 // convert from cents
+      invoices.reduce((acc, inv) => acc + inv.amount_paid, 0) / 100
 
-    const monthlyRevenue = sum(monthlyInvoices)
-    const allTimeRevenue = sum(allTimeInvoices)
+    res.status(200).json({
+      monthlyRevenue: sum(monthlyInvoices),
+      totalRevenue: sum(allTimeInvoices),
+    })
 
-    res.status(200).json({ monthlyRevenue, allTimeRevenue })
 
   } catch (error) {
     console.error(error)
