@@ -3,7 +3,7 @@ import { Spin } from 'antd';
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import ProtectedRoute from './Components/ProtectedRoute/ProtectedRoute';
 import { TenantsSection } from './pages/SuperAdmin/pages/TenantSection';
-import { SubscriptionsSection } from './pages/SuperAdmin/pages/SubscriptionSection';
+import { SubscriptionSection } from './pages/SuperAdmin/pages/SubscriptionSection';
 import { OverviewSection } from './pages/SuperAdmin/pages/OverviewSection';
 import { AuditSection } from './pages/SuperAdmin/pages/AuditSection';
 const Login = lazy(() => import('./pages/admin/Login'))
@@ -75,7 +75,7 @@ const App = () => {
             </ProtectedRoute>}> 
             <Route index  element={<OverviewSection/>}/>
             <Route path='tenants' element={<TenantsSection/>}/>
-            <Route path='subscriptions' element={<SubscriptionsSection/>}/>
+            <Route path='subscriptions' element={<SubscriptionSection/>}/>
             <Route path='audits' element={<AuditSection/>}/>
 
             </Route>
