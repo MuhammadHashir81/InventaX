@@ -17,6 +17,7 @@ import {
   FiClock,
   FiSearch,
   FiFilter,
+  FiHome,
 } from "react-icons/fi";
 import { IoIosLogOut } from "react-icons/io";
 import { api } from "../../../api/api";
@@ -39,7 +40,7 @@ const SUBSCRIPTIONS = [
     { id: 3, tenant: "Pixel Hub", plan: "Pro", amount: "$49/mo", status: "past_due", nextBilling: "2026-06-22", stripeId: "sub_3Ghi" },
     { id: 4, tenant: "BrightPath", plan: "Free", amount: "$199/mo", status: "active", nextBilling: "2026-07-11", stripeId: "sub_4Jkl" },
     { id: 5, tenant: "Stackify", plan: "Pro", amount: "$19/mo", status: "canceled", nextBilling: "—", stripeId: "sub_5Mno" },
-  ];
+];
 
 const AUDIT_LOGS = [
   { id: 1, actor: "john@acme.com", action: "Created invoice #INV-0042", tenant: "Acme Corp", time: "2 min ago", level: "info" },
@@ -89,9 +90,10 @@ const AuditIcon = ({ level }) => {
 
 const NAV = [
   { key: "overview", link:'/super-admin', label: "Overview", icon: <FiGrid /> },
+  {key: "Dashboard", link:"/super-admin/dashboard", label:"Dashboard",  icon:<FiHome/>},
   { key: "tenants", link:'/super-admin/tenants', label: "Tenants", icon: <FiUsers /> },
   { key: "subscriptions", link:'/super-admin/subscriptions', label: "Subscriptions", icon: <FiCreditCard /> },
-  { key: "audit", link:'/super-admin/audits' ,label: "Audit Logs", icon: <FiList /> },
+  // { key: "audit", link:'/super-admin/audits' ,label: "Audit Logs", icon: <FiList /> },
 ];
 
 // ─── Main Component ───────────────────────────────────────────────────────────

@@ -146,7 +146,7 @@ export const SubscriptionSection = () => {
                                     <StatusBadge status={t.subscription.status}/>
                                 </td>
                                 <td className="px-5 py-3 text-gray-400">
-                                    {formatDate(t.subscription.currentPeriodStart ? t.subscription.currentPeriodStart : t.subscription.trialStartDate)}
+                                    {formatDate(t.subscription.currentPeriodStart ? t.subscription.currentPeriodEnd : t.subscription.trialEndDate)}
                                 </td>
 
                             </tr>

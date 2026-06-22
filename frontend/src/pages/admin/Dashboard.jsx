@@ -7,7 +7,7 @@ import {
   AreaChart,
   CartesianGrid,
   Legend,
-  ResponsiveContainer,
+  ResponsiveContainer,  
   Tooltip,
   XAxis,
   YAxis,
@@ -179,10 +179,10 @@ const Dashboard = () => {
     >
       <div>
         <div>
-          <div className='flex items-center gap-1 mb-4'>
-            <MdHome size={15} />
-            <h6 className='font-primary font-medium'>Home</h6>
-          </div>
+            <div className='flex items-center gap-1 mb-4'>
+              <MdHome size={15} />
+              <h6 className='font-primary font-medium'>Home</h6>
+            </div>
 
           <h2 className='font-primary text-xl font-bold mb-2'>Dashboard</h2>
 

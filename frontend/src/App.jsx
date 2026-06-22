@@ -6,6 +6,7 @@ import { TenantsSection } from './pages/SuperAdmin/pages/TenantSection';
 import { SubscriptionSection } from './pages/SuperAdmin/pages/SubscriptionSection';
 import { OverviewSection } from './pages/SuperAdmin/pages/OverviewSection';
 import { AuditSection } from './pages/SuperAdmin/pages/AuditSection';
+import SuperDashboard from './pages/SuperAdmin/pages/SuperDashboard';
 const Login = lazy(() => import('./pages/admin/Login'))
 const Dashboard = lazy(() => import('./pages/admin/Dashboard'))
 const AdminLayout = lazy(() => import('./pages/admin/AdminLayout'))
@@ -76,7 +77,7 @@ const App = () => {
             <Route index  element={<OverviewSection/>}/>
             <Route path='tenants' element={<TenantsSection/>}/>
             <Route path='subscriptions' element={<SubscriptionSection/>}/>
-            <Route path='audits' element={<AuditSection/>}/>
+            <Route path='dashboard' element={<SuperDashboard/>}/>
 
             </Route>
 

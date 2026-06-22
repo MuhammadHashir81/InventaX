@@ -56,6 +56,10 @@ export const getAllTenants = async (req, res) => {
         }
       },
       {
+        $sort:
+          { createdAt: -1 }
+      },
+      {
         $project: {
           _id: 1,
           username: 1,
@@ -66,7 +70,7 @@ export const getAllTenants = async (req, res) => {
           customers: 1
         }
       },
-
+      
       { $skip: skip },
       { $limit: limit }
 
