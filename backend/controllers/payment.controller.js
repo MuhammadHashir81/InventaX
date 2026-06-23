@@ -304,7 +304,7 @@ export const handleWebhook = async (req, res) => {
             
           }
         )
-        console.log(`❌ Subscription expired/deleted — sub: ${subscription.id}`)
+        console.log(` Subscription expired/deleted — sub: ${subscription.id}`)
         // TODO: Send "your plan has ended" email here
         break
       }

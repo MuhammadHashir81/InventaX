@@ -1,8 +1,22 @@
 import { MdHome } from 'react-icons/md';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Card, Col, ConfigProvider, DatePicker, Row, Select, Space, Statistic } from 'antd';
+import { api } from '../../../../api/api';
 
 const SuperDashboard = () => {
+
+    const formatRequestDate = (value) => {
+        if (!value) {
+            return null;
+        }
+
+        if (typeof value.toISOString === 'function') {
+            return value.toISOString();
+        }
+
+        return value;
+    };
+
 
     const DEFAULT_RANGE = 'Last 30 Days';
 
@@ -20,19 +34,37 @@ const SuperDashboard = () => {
         'Last year',
         'All Time',
     ];
-    
+
     const [selectedRange, setSelectedRange] = useState(DEFAULT_RANGE);
     const [startDate, setStartDate] = useState(null);
     const [endDate, setEndDate] = useState(null);
-    const [selectedProduct, setSelectedProduct] = useState('');
-    const [productSearch, setProductSearch] = useState('');
-    const [products, setProducts] = useState([]);
-    const [selectedCustomer, setSelectedCustomer] = useState('');
-    const [customerSearch, setCustomerSearch] = useState('');
-    const [customers, setCustomers] = useState([]);
-    
 
 
+    // build filters payload 
+
+    const buildPayload = (overrides = {}) => ({
+        range: overrides.range ?? selectedRange,
+        startDate: formatRequestDate(overrides.startDate ?? startDate),
+        endDate: formatRequestDate(overrides.endDate ?? endDate),
+    });
+
+    const now = new Date()
+
+    const monthlyDate = new Date(now.getFullYear(),now.getMonth() + 1)
+    console.log(now)
+    console.log(monthlyDate)
+
+
+    const handleApplyFilters = () => {
+        const payload = buildPayload()
+        console.log(payload)
+    }
+
+    const handleClearFilters = () => {
+        setSelectedRange(DEFAULT_RANGE);
+        setStartDate(null);
+        setEndDate(null);
+    }
 
 
 
@@ -87,55 +119,18 @@ const SuperDashboard = () => {
                             </Space>
                         </div>
 
-                        <div className='flex flex-col gap-1'>
-                            <h2 className='font-primary font-medium'>Filter by Product</h2>
-                            <Select
-                                value={selectedProduct || undefined}
-                                placeholder='Products'
-                                style={{ width: '100%' }}
-                                showSearch
-                                optionFilterProp='label'
-                                filterOption={false}
-                                onSearch={setProductSearch}
-                                onSelect={(value) => setSelectedProduct(value)}
-                                allowClear
-                                onClear={() => setSelectedProduct('')}
-                                options={products.map((product) => ({
-                                    value: product._id,
-                                    label: product.name,
-                                }))}
-                            />
-                        </div>
-
-                        <div className='flex flex-col gap-1'>
-                            <h2 className='font-primary font-medium'>Filter by Customer</h2>
-                            <Select
-                                value={selectedCustomer || undefined}
-                                placeholder='Customers'
-                                style={{ width: '100%' }}
-                                showSearch
-                                optionFilterProp='label'
-                                filterOption={false}
-                                onSearch={setCustomerSearch}
-                                onSelect={(value) => setSelectedCustomer(value)}
-                                allowClear
-                                onClear={() => setSelectedCustomer('')}
-                                options={customers.map((customer) => ({
-                                    value: customer._id,
-                                    label: customer.name,
-                                }))}
-                            />
-                        </div>
+                        
                     </div>
 
                     <div className='mt-7 flex gap-4'>
                         <button
-                        onClick={handleApplyFilters}
+                            onClick={handleApplyFilters}
                             className='bg-blue-500 px-4 py-2 text-white font-primary font-medium rounded-md cursor-pointer hover:bg-blue-600'
                         >
                             Apply Filters
                         </button>
                         <button
+                            onClick={handleClearFilters}
                             className='bg-gray-200 hover:bg-gray-300 cursor-pointer text-black px-4 py-2 font-primary font-medium rounded-md'
                         >
                             Clear Filters
