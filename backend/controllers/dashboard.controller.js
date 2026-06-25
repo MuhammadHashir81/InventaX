@@ -41,16 +41,19 @@ const endOfMonth = (date) => {
 };
 
 const addDays = (date, days) => {
-    const value = new Date(date);
-    value.setDate(value.getDate() + days);
-    return value;
-};
+        const value = new Date(date);
+        value.setDate(value.getDate() + days);
+        return value;
+    };
+
 
 const addMonths = (date, months) => {
-    const value = new Date(date);
-    value.setMonth(value.getMonth() + months);
-    return value;
+        const value = new Date(date);
+        value.setMonth(value.getMonth() + months);
+        return value;
 };
+
+
 
 const startOfWeek = (date) => {
     const value = startOfDay(date);

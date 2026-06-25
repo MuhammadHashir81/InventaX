@@ -323,7 +323,7 @@ const Customers = () => {
                     </div>
                     <button className=' bg-green-500 hover:bg-green-600 px-4 py-2 text-white font-primary rounded-md cursor-pointer'>Add Customer</button>
                 </form>
-
+        
             
             {/* table data */}
             <div className='my-8'>
